@@ -1,5 +1,3 @@
-# Cleaned Jay Games Code
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +17,6 @@
         }
         body {
             background-color: #050505;
-
             color: white;
             font-family: 'Rajdhani', sans-serif;
             overflow: hidden;
@@ -39,7 +36,6 @@
         }
         #cursorDot {
             width: 4px;
-
             height: 4px;
             background: var(--neon-pink);
             border-radius: 50%;
@@ -59,7 +55,6 @@
             animation: gradientBG 15s ease infinite;
         }
         @keyframes gradientBG {
-
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -79,7 +74,6 @@
             font-family: 'Orbitron', sans-serif;
             position: relative;
             z-index: 1;
-
         }
         .glitch-text::before, .glitch-text::after {
             content: "JAY GAMES";
@@ -99,7 +93,6 @@
             animation: glitch-anim 5s infinite linear alternate-reverse;
         }
         .glitch-wrapper:hover .glitch-text::after {
-
             display: block;
             left: -2px;
             text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
@@ -119,7 +112,6 @@
             40% { clip: rect(45px, 9999px, 60px, 0); }
             60% { clip: rect(25px, 9999px, 40px, 0); }
             80% { clip: rect(75px, 9999px, 90px, 0); }
-
             100% { clip: rect(5px, 9999px, 20px, 0); }
         }
         .liquid-card, .btn-game {
@@ -139,7 +131,6 @@
             height: 300%;
             background: conic-gradient(
                 transparent, 
-
                 transparent, 
                 transparent, 
                 currentColor
@@ -159,7 +150,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .btn-game {
             padding: 1rem 2.5rem;
             font-weight: 700;
@@ -179,7 +169,6 @@
             height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transform: skewX(-25deg);
-
             transition: all 0.6s ease;
             z-index: 0;
             pointer-events: none;
@@ -199,7 +188,6 @@
             right: 20px;
             background: rgba(255, 255, 255, 0.1);
             padding: 10px;
-
             border-radius: 50%;
             border: 1px solid var(--neon-cyan);
             z-index: 100;
@@ -219,7 +207,6 @@
             top: 0;
             left: 0;
             z-index: 0;
-
         }
     </style>
 </head>
@@ -239,7 +226,6 @@
              class="parallax-item w-32 md:w-48 top-20 left-20 rounded-xl" data-speed="2" alt="Controller">
         <img src="https://images.unsplash.com/photo-1685914963658-11d4c18527c1?fm=jpg&q=60&w=300&auto=format&fit=crop" 
              class="parallax-item w-32 md:w-48 bottom-20 right-20 rounded-xl" data-speed="-3" alt="Arcade">
-
         <div class="liquid-card p-12 max-w-2xl w-full" style="color: var(--neon-purple);">
             <div class="glitch-wrapper mb-4">
                 <h1 class="text-6xl md:text-8xl font-black glitch-text tracking-tighter" style="color: white;">JAY GAMES</h1>
@@ -259,7 +245,6 @@
         const audioBtn = document.getElementById('audioToggle');
         const parallaxItems = document.querySelectorAll('.parallax-item');
         document.addEventListener('mousemove', (e) => {
-
             const x = e.clientX;
             const y = e.clientY;
             cursor.style.left = `${x - 10}px`;
@@ -279,7 +264,6 @@
         });
         let isPlaying = false;
         audioBtn.onclick = () => {
-
             isPlaying = !isPlaying;
             audioBtn.classList.toggle('playing', isPlaying);
             console.log(isPlaying ? "Playing Background Synthwave..." : "Audio Muted.");
@@ -299,7 +283,6 @@
                     speedX: Math.random() * 0.5 - 0.25,
                     speedY: Math.random() * 0.5 - 0.25,
                     color: Math.random() > 0.5 ? '#00f2ff' : '#ff00ea'
-
                 });
             }
         }
@@ -319,36 +302,31 @@
             requestAnimationFrame(animateParticles);
         }
         const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN7umeTYkTAMvTPIox_WCHpTZT9MoKjRSQwA1kQV2blrVwYc83xnkveIBhxhophEApUlnBUuold7oI/pub?gid=0&single=true&output=csv';
-
         fetch(sheetUrl).then(res => res.text()).then(data => {
-            const rows = data.split(/\r?\n/);
+            const rows = data.split(/\r?\n/).slice(1);
             const container = document.getElementById('gameContainer');
-            if (rows.length > 0) {
-                container.innerHTML = '';
-                rows.forEach(row => {
-                    const cols = row.split(',');
-                    if (cols.length >= 3) {
-                        const name = cols[0].trim();
-                        const file = cols[1].trim();
-                        const color = cols[2].trim().toLowerCase();
-                        if (name && file) {
-                            const btn = document.createElement('a');
-                            btn.href = file;
-                            btn.className = `btn-game btn-${color} text-lg`;
-                            btn.innerHTML = `<span class="shine-layer"></span><span class="relative z-10">${name}</span>`;
-                            container.appendChild(btn);
-                            btn.onmouseenter = () => cursor.style.transform = 'scale(2.5)';
-                            btn.onmouseleave = () => cursor.style.transform = 'scale(1)';
-
-                        }
+            container.innerHTML = '';
+            rows.forEach(row => {
+                const cols = row.split(',');
+                if (cols.length >= 3) {
+                    const name = cols[0].trim();
+                    const file = cols[1].trim();
+                    const color = cols[2].trim();
+                    if (name && file) {
+                        const btn = document.createElement('a');
+                        btn.href = file;
+                        btn.className = 'btn-game text-lg';
+                        btn.style.color = color;
+                        btn.innerHTML = `<span class="shine-layer"></span><span class="relative z-10">${name}</span>`;
+                        container.appendChild(btn);
+                        btn.onmouseenter = () => cursor.style.transform = 'scale(2.5)';
+                        btn.onmouseleave = () => cursor.style.transform = 'scale(1)';
                     }
-                });
-            }
+                }
+            });
         });
         window.onload = () => { init(); animateParticles(); };
         window.onresize = init;
     </script>
 </body>
 </html>
-
-
