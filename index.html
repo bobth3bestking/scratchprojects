@@ -1,3 +1,5 @@
+# Cleaned Jay Games Code
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,22 +14,18 @@
             --neon-pink: #ff00ea;
             --neon-purple: #9d00ff;
         }
-
         * {
-            cursor: none !important; /* Required for Custom Cursor */
+            cursor: none !important;
         }
-
-
         body {
             background-color: #050505;
+
             color: white;
             font-family: 'Rajdhani', sans-serif;
             overflow: hidden;
             margin: 0;
             height: 100vh;
         }
-
-        /* 1. Custom Cyberpunk Cursor */
         #customCursor {
             width: 20px;
             height: 20px;
@@ -37,12 +35,11 @@
             pointer-events: none;
             z-index: 9999;
             transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
-
             box-shadow: 0 0 15px var(--neon-cyan);
         }
-
         #cursorDot {
             width: 4px;
+
             height: 4px;
             background: var(--neon-pink);
             border-radius: 50%;
@@ -50,61 +47,50 @@
             pointer-events: none;
             z-index: 9999;
         }
-
-        /* Animated Background */
         .bg-canvas {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-
             height: 100%;
             z-index: -1;
             background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
         }
-
         @keyframes gradientBG {
+
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
-        /* 2. Floating Parallax Elements */
         .parallax-item {
             position: absolute;
             pointer-events: none;
             opacity: 0.4;
             transition: transform 0.2s ease-out;
-
             filter: drop-shadow(0 0 15px var(--neon-cyan));
         }
-
-        /* 3. Glitch Text Effect */
         .glitch-wrapper {
             position: relative;
             display: inline-block;
         }
-
         .glitch-text {
             font-family: 'Orbitron', sans-serif;
             position: relative;
             z-index: 1;
-        }
 
+        }
         .glitch-text::before, .glitch-text::after {
             content: "JAY GAMES";
             position: absolute;
             top: 0;
-
             left: 0;
             width: 100%;
             height: 100%;
             background: #050505;
             display: none;
         }
-
         .glitch-wrapper:hover .glitch-text::before {
             display: block;
             left: 2px;
@@ -112,15 +98,13 @@
             clip: rect(44px, 450px, 56px, 0);
             animation: glitch-anim 5s infinite linear alternate-reverse;
         }
-
         .glitch-wrapper:hover .glitch-text::after {
+
             display: block;
             left: -2px;
             text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
-
             animation: glitch-anim2 1s infinite linear alternate-reverse;
         }
-
         @keyframes glitch-anim {
             0% { clip: rect(31px, 9999px, 94px, 0); }
             20% { clip: rect(62px, 9999px, 42px, 0); }
@@ -129,18 +113,15 @@
             80% { clip: rect(81px, 9999px, 83px, 0); }
             100% { clip: rect(22px, 9999px, 54px, 0); }
         }
-
         @keyframes glitch-anim2 {
             0% { clip: rect(65px, 9999px, 100px, 0); }
             20% { clip: rect(15px, 9999px, 30px, 0); }
             40% { clip: rect(45px, 9999px, 60px, 0); }
             60% { clip: rect(25px, 9999px, 40px, 0); }
             80% { clip: rect(75px, 9999px, 90px, 0); }
+
             100% { clip: rect(5px, 9999px, 20px, 0); }
-
         }
-
-        /* 4. Liquid Border Glow Logic (Shared) */
         .liquid-card, .btn-game {
             position: relative;
             background: rgba(10, 10, 10, 0.8);
@@ -149,18 +130,16 @@
             overflow: hidden;
             z-index: 1;
         }
-
-        /* Liquid Border Animation */
         .liquid-card::before, .btn-game::before {
             content: '';
             position: absolute;
             top: -100%;
             left: -100%;
             width: 300%;
-
             height: 300%;
             background: conic-gradient(
                 transparent, 
+
                 transparent, 
                 transparent, 
                 currentColor
@@ -168,7 +147,6 @@
             animation: rotateBorder 3s linear infinite;
             z-index: -2;
         }
-
         .liquid-card::after, .btn-game::after {
             content: '';
             position: absolute;
@@ -177,14 +155,11 @@
             border-radius: inherit;
             z-index: -1;
         }
-
-
         @keyframes rotateBorder {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Updated Interactive Buttons with Liquid Border */
         .btn-game {
             padding: 1rem 2.5rem;
             font-weight: 700;
@@ -196,9 +171,6 @@
             display: inline-block;
             min-width: 180px;
         }
-
-        /* Slanted Slide Effect Layer inside button */
-
         .shine-layer {
             position: absolute;
             top: 0;
@@ -207,102 +179,73 @@
             height: 100%;
             background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transform: skewX(-25deg);
+
             transition: all 0.6s ease;
             z-index: 0;
             pointer-events: none;
         }
-
         .btn-game:hover .shine-layer {
             left: 150%;
         }
-
         .btn-cyan { color: var(--neon-cyan); }
         .btn-pink { color: var(--neon-pink); }
-
-        
         .btn-game:hover {
             transform: translateY(-5px) scale(1.05);
             box-shadow: 0 0 30px currentColor;
         }
-
-        /* 5. Audio Toggle Button */
         #audioToggle {
             position: fixed;
             top: 20px;
             right: 20px;
             background: rgba(255, 255, 255, 0.1);
             padding: 10px;
+
             border-radius: 50%;
             border: 1px solid var(--neon-cyan);
             z-index: 100;
             transition: all 0.3s ease;
         }
-
-
         #audioToggle.playing {
             box-shadow: 0 0 20px var(--neon-cyan);
             animation: pulse 1.5s infinite;
         }
-
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-
         #particleCanvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: 0;
+
         }
     </style>
 </head>
 <body>
-
     <div id="customCursor"></div>
     <div id="cursorDot"></div>
     <div class="bg-canvas"></div>
     <canvas id="particleCanvas"></canvas>
-
-    <!-- Audio Toggle -->
     <button id="audioToggle" title="Toggle Sound">
         <svg id="speakerIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         </svg>
     </button>
-
     <div class="relative z-10 flex flex-col items-center justify-center min-h-screen p-6 text-center">
-        <!-- Parallax Items -->
         <img src="https://images.unsplash.com/photo-1664092815283-19c6196f5319?fm=jpg&q=60&w=300&auto=format&fit=crop" 
              class="parallax-item w-32 md:w-48 top-20 left-20 rounded-xl" data-speed="2" alt="Controller">
-        
         <img src="https://images.unsplash.com/photo-1685914963658-11d4c18527c1?fm=jpg&q=60&w=300&auto=format&fit=crop" 
-
              class="parallax-item w-32 md:w-48 bottom-20 right-20 rounded-xl" data-speed="-3" alt="Arcade">
 
-        <!-- Main Liquid Card -->
         <div class="liquid-card p-12 max-w-2xl w-full" style="color: var(--neon-purple);">
             <div class="glitch-wrapper mb-4">
                 <h1 class="text-6xl md:text-8xl font-black glitch-text tracking-tighter" style="color: white;">JAY GAMES</h1>
             </div>
             <p class="text-xl md:text-2xl text-gray-300 font-light mb-12 tracking-widest">ENTER THE VIRTUAL DIMENSION</p>
-            
-            <div class="flex flex-col md:flex-row gap-6 justify-center">
-                <!-- Left Button: Clicker -->
-                <a href="clicker.html" class="btn-game btn-cyan text-lg">
-                    <span class="shine-layer"></span>
-                    <span class="relative z-10">CLICKER</span>
-                </a>
-                <!-- Right Button: Mexell -->
-                <a href="Appelm.html" class="btn-game btn-pink text-lg">
-                    <span class="shine-layer"></span>
-                    <span class="relative z-10">MEXELL</span>
-
-                </a>
-            </div>
-            
+            <div id="gameContainer" class="grid grid-cols-2 gap-6 justify-center max-w-max mx-auto"></div>
             <div class="mt-12 opacity-50 flex items-center justify-center gap-4">
                 <span class="w-12 h-1 bg-cyan-500 rounded-full animate-pulse"></span>
                 <p class="text-sm uppercase text-white">Core System Online</p>
@@ -310,25 +253,19 @@
             </div>
         </div>
     </div>
-
     <script>
         const cursor = document.getElementById('customCursor');
         const dot = document.getElementById('cursorDot');
         const audioBtn = document.getElementById('audioToggle');
         const parallaxItems = document.querySelectorAll('.parallax-item');
-
-        // 1. Custom Cursor Movement
         document.addEventListener('mousemove', (e) => {
 
             const x = e.clientX;
             const y = e.clientY;
-            
             cursor.style.left = `${x - 10}px`;
             cursor.style.top = `${y - 10}px`;
             dot.style.left = `${x - 2}px`;
             dot.style.top = `${y - 2}px`;
-
-            // 2. Parallax Logic
             parallaxItems.forEach(item => {
                 const speed = item.getAttribute('data-speed');
                 const xPos = (window.innerWidth - e.pageX * speed) / 100;
@@ -336,30 +273,23 @@
                 item.style.transform = `translateX(${xPos}px) translateY(${yPos}px)`;
             });
         });
-
         document.querySelectorAll('a, button').forEach(el => {
             el.onmouseenter = () => cursor.style.transform = 'scale(2.5)';
-
             el.onmouseleave = () => cursor.style.transform = 'scale(1)';
         });
-
-        // 5. Audio Toggle Logic
         let isPlaying = false;
         audioBtn.onclick = () => {
+
             isPlaying = !isPlaying;
             audioBtn.classList.toggle('playing', isPlaying);
             console.log(isPlaying ? "Playing Background Synthwave..." : "Audio Muted.");
         };
-
-        // Particle Background
         const canvas = document.getElementById('particleCanvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
-
         function init() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-
             particles = [];
             for (let i = 0; i < 50; i++) {
                 particles.push({
@@ -369,17 +299,16 @@
                     speedX: Math.random() * 0.5 - 0.25,
                     speedY: Math.random() * 0.5 - 0.25,
                     color: Math.random() > 0.5 ? '#00f2ff' : '#ff00ea'
+
                 });
             }
         }
-
         function animateParticles() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
                 p.x += p.speedX; p.y += p.speedY;
                 if (p.x > canvas.width) p.x = 0;
                 if (p.x < 0) p.x = canvas.width;
-
                 if (p.y > canvas.height) p.y = 0;
                 if (p.y < 0) p.y = canvas.height;
                 ctx.beginPath();
@@ -389,7 +318,33 @@
             });
             requestAnimationFrame(animateParticles);
         }
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTN7umeTYkTAMvTPIox_WCHpTZT9MoKjRSQwA1kQV2blrVwYc83xnkveIBhxhophEApUlnBUuold7oI/pub?gid=0&single=true&output=csv';
 
+        fetch(sheetUrl).then(res => res.text()).then(data => {
+            const rows = data.split(/\r?\n/);
+            const container = document.getElementById('gameContainer');
+            if (rows.length > 0) {
+                container.innerHTML = '';
+                rows.forEach(row => {
+                    const cols = row.split(',');
+                    if (cols.length >= 3) {
+                        const name = cols[0].trim();
+                        const file = cols[1].trim();
+                        const color = cols[2].trim().toLowerCase();
+                        if (name && file) {
+                            const btn = document.createElement('a');
+                            btn.href = file;
+                            btn.className = `btn-game btn-${color} text-lg`;
+                            btn.innerHTML = `<span class="shine-layer"></span><span class="relative z-10">${name}</span>`;
+                            container.appendChild(btn);
+                            btn.onmouseenter = () => cursor.style.transform = 'scale(2.5)';
+                            btn.onmouseleave = () => cursor.style.transform = 'scale(1)';
+
+                        }
+                    }
+                });
+            }
+        });
         window.onload = () => { init(); animateParticles(); };
         window.onresize = init;
     </script>
