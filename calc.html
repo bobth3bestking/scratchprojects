@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jay's Tools // Surface Area Void</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --neon-blue: #00f2ff;
+            --neon-purple: #bc13fe;
+            --dark-bg: #050505;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Responsive Background Glow */
+        #bg-glow {
+            position: fixed;
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%;
+
+            z-index: -1;
+            background: 
+                radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(0, 242, 255, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at var(--x2, 80%) var(--y2, 20%), rgba(188, 19, 254, 0.12) 0%, transparent 45%);
+            pointer-events: none;
+        }
+
+        /* Glass Card Style */
+        .glass-container {
+            width: 90vw;
+            max-width: 1200px;
+            height: 80vh;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            position: relative;
+            display: flex;
+
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* UI Accents */
+        .corner-accent {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--neon-blue);
+            opacity: 0.5;
+        }
+
+        .top-left { top: -1px; left: -1px; border-right: 0; border-bottom: 0; border-radius: 32px 0 0 0; }
+        .bottom-right { bottom: -1px; right: -1px; border-left: 0; border-top: 0; border-radius: 0 0 32px 0; }
+
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 0.2em;
+
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Work Log Panel (Left) */
+        .work-panel {
+            position: absolute;
+            top: 8rem;
+            left: 2rem;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.01);
+            border-left: 2px solid var(--neon-purple);
+            padding: 1.5rem;
+            pointer-events: none;
+        }
+
+        .work-content {
+            font-family: 'Space Grotesk', sans-serif;
+
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1rem;
+        }
+
+        .work-step {
+            display: block;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            animation: slideIn 0.4s forwards;
+        }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Calculator Section Styling */
+
+        .calc-panel {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            width: 340px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+            max-height: 90%;
+            overflow-y: auto;
+        }
+
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+
+            padding: 0.6rem 1rem;
+            color: white;
+            width: 100%;
+            outline: none;
+            transition: 0.3s;
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+        }
+
+        .input-field:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+        }
+
+        .select-field {
+            appearance: none;
+            cursor: pointer;
+            background: rgba(188, 19, 254, 0.1);
+            border: 1px solid var(--neon-purple);
+
+        }
+
+        .btn-calculate {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 1.2rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border-radius: 8px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-calculate:hover {
+
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .result-display {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .result-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+        }
+
+
+        .label-text {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 0.8rem;
+            display: block;
+        }
+
+        .hidden { display: none; }
+
+        /* Scanning Line */
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-purple), transparent);
+            top: 0;
+            left: 0;
+
+            opacity: 0.1;
+            animation: scan 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .noise {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url('https://upload.wikimedia.org');
+        }
+
+    </style>
+</head>
+<body>
+
+
+    <div id="bg-glow"></div>
+    <div class="noise"></div>
+
+    <div class="glass-container">
+        <div class="scan-line"></div>
+        <div class="corner-accent top-left"></div>
+        <div class="corner-accent bottom-right"></div>
+
+        <!-- Interface Metadata -->
+        <div class="p-8 flex justify-between items-start w-full">
+            <div class="heading-font">Tool_Module // Area_Engine</div>
+            <div class="heading-font" id="live-clock">00:00:00</div>
+        </div>
+
+        <!-- Work Log Panel (Added Left Section) -->
+        <div class="work-panel">
+            <span class="label-text">Logic Breakdown</span>
+            <div class="work-content" id="work-log">
+                <span class="work-step" style="color: var(--neon-blue)">// System ready.</span>
+
+                <span class="work-step">Waiting for input data...</span>
+            </div>
+        </div>
+
+        <!-- Main Empty Area -->
+        <div class="flex-grow flex items-center justify-center pointer-events-none">
+             <div class="w-12 h-[1px] bg-white opacity-5"></div>
+        </div>
+
+        <!-- Bottom Left Status -->
+        <div class="p-8">
+            <div class="heading-font">Protocol: Active</div>
+            <div class="heading-font">System: Area_Focus</div>
+        </div>
+
+        <!-- Calculator Panel (Bottom Right) -->
+        <div class="calc-panel">
+            <span class="label-text">Select Shape</span>
+            <select id="formula-select" class="input-field select-field">
+
+                <optgroup label="2D Area">
+                    <option value="rectangle">Rectangle</option>
+                    <option value="square">Square</option>
+                    <option value="circle">Circle (π=3.14)</option>
+                    <option value="triangle">Triangle</option>
+                </optgroup>
+                <optgroup label="3D Surface Area">
+                    <option value="cube">Cube</option>
+                    <option value="rect_prism">Rectangular Prism</option>
+                    <option value="tri_prism">Triangular Prism</option>
+                    <option value="cylinder">Cylinder (π=3.14)</option>
+                    <option value="sphere">Sphere (π=3.14)</option>
+                </optgroup>
+            </select>
+
+            <div id="inputs-container">
+                <div id="group-dim1">
+                    <span class="label-text" id="label-dim1">Length</span>
+                    <input type="number" id="dim1" class="input-field" placeholder="0.00">
+
+                </div>
+                <div id="group-dim2">
+                    <span class="label-text" id="label-dim2">Width</span>
+                    <input type="number" id="dim2" class="input-field" placeholder="0.00">
+                </div>
+                <div id="group-dim3" class="hidden">
+                    <span class="label-text" id="label-dim3">Depth</span>
+                    <input type="number" id="dim3" class="input-field" placeholder="0.00">
+                </div>
+            </div>
+
+            <button class="btn-calculate" onclick="calculate()">Calculate Area</button>
+
+            <div class="result-display">
+                <span class="label-text">Computed Surface Area</span>
+                <div class="result-value" id="result-out">0.00</div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const bgGlow = document.getElementById('bg-glow');
+        const formulaSelect = document.getElementById('formula-select');
+        const dim1 = document.getElementById('dim1');
+        const dim2 = document.getElementById('dim2');
+        const dim3 = document.getElementById('dim3');
+        const groupDim2 = document.getElementById('group-dim2');
+        const groupDim3 = document.getElementById('group-dim3');
+        const label1 = document.getElementById('label-dim1');
+        const label2 = document.getElementById('label-dim2');
+        const label3 = document.getElementById('label-dim3');
+        const resultOut = document.getElementById('result-out');
+        const workLog = document.getElementById('work-log');
+
+        // Mouse Tracking
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            bgGlow.style.setProperty('--x', `${x}%`);
+
+            bgGlow.style.setProperty('--y', `${y}%`);
+            bgGlow.style.setProperty('--x2', `${100 - x}%`);
+            bgGlow.style.setProperty('--y2', `${100 - y}%`);
+        });
+
+        // Clock Update
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Formula UI Logic
+        formulaSelect.addEventListener('change', (e) => {
+            const type = e.target.value;
+            groupDim2.classList.remove('hidden');
+            groupDim3.classList.add('hidden');
+
+
+            switch(type) {
+                case 'rectangle':
+                    label1.innerText = "Length";
+                    label2.innerText = "Width";
+                    break;
+                case 'square':
+                    label1.innerText = "Side Length";
+                    groupDim2.classList.add('hidden');
+                    break;
+                case 'circle':
+                    label1.innerText = "Radius";
+                    groupDim2.classList.add('hidden');
+                    break;
+                case 'triangle':
+                    label1.innerText = "Base";
+                    label2.innerText = "Height";
+                    break;
+                case 'cube':
+                    label1.innerText = "Side Length";
+
+                    groupDim2.classList.add('hidden');
+                    break;
+                case 'rect_prism':
+                    label1.innerText = "Length (l)";
+                    label2.innerText = "Width (w)";
+                    label3.innerText = "Height (h)";
+                    groupDim3.classList.remove('hidden');
+                    break;
+                case 'tri_prism':
+                    label1.innerText = "Tri Base (b)";
+                    label2.innerText = "Tri Height (h)";
+                    label3.innerText = "Prism Length (L)";
+                    groupDim3.classList.remove('hidden');
+                    break;
+                case 'cylinder':
+                    label1.innerText = "Radius (r)";
+                    label2.innerText = "Height (h)";
+                    break;
+                case 'sphere':
+
+                    label1.innerText = "Radius (r)";
+                    groupDim2.classList.add('hidden');
+                    break;
+            }
+        });
+
+        // "Show Your Work" Helper function
+        function displayWork(steps) {
+            workLog.innerHTML = '';
+            steps.forEach((step, index) => {
+                const span = document.createElement('span');
+                span.className = 'work-step';
+                span.style.animationDelay = `${index * 0.1}s`;
+                span.innerHTML = step;
+                workLog.appendChild(span);
+            });
+        }
+
+        // Calculation Engine (Surface Area focus)
+
+        function calculate() {
+            const type = formulaSelect.value;
+            const v1 = parseFloat(dim1.value) || 0;
+            const v2 = parseFloat(dim2.value) || 0;
+            const v3 = parseFloat(dim3.value) || 0;
+            const pi = 3.14; // User constraint
+            let result = 0;
+            let steps = [];
+
+            switch(type) {
+                case 'rectangle': 
+                    result = v1 * v2; 
+                    steps = ["Form: Area = l * w", `Sub: ${v1} * ${v2}`, `Result: ${result}`];
+                    break;
+                case 'square': 
+                    result = v1 * v1; 
+                    steps = ["Form: Area = s²", `Sub: ${v1} * ${v1}`, `Result: ${result}`];
+                    break;
+                case 'circle': 
+
+                    result = pi * (v1 * v1); 
+                    steps = ["Form: Area = πr²", `Sub: 3.14 * (${v1}²)`, `Result: ${result}`];
+                    break;
+                case 'triangle': 
+                    result = 0.5 * v1 * v2; 
+                    steps = ["Form: Area = 0.5 * b * h", `Sub: 0.5 * ${v1} * ${v2}`, `Result: ${result}`];
+                    break;
+                case 'cube': 
+                    result = 6 * (v1 * v1); 
+                    steps = ["Form: SA = 6s²", `Sub: 6 * (${v1}²)`, `Result: ${result}`];
+                    break;
+                case 'rect_prism': 
+                    result = 2 * (v1 * v2 + v1 * v3 + v2 * v3); 
+                    steps = ["Form: SA = 2(lw+lh+wh)", `Sub: 2(${v1}*${v2} + ${v1}*${v3} + ${v2}*${v3})`, `Result: ${result}`];
+                    break;
+                case 'tri_prism': 
+                    const hypotenuse = Math.sqrt(v1*v1 + v2*v2);
+                    const perimeter = v1 + v2 + hypotenuse;
+                    result = (v1 * v2) + (perimeter * v3);
+
+                    steps = ["Form: SA = (bh) + (peri * L)", `Sub: (${v1}*${v2}) + (${perimeter.toFixed(2)} * ${v3})`, `Result: ${result}`];
+                    break;
+                case 'cylinder': 
+                    result = (2 * pi * v1 * v1) + (2 * pi * v1 * v2); 
+                    steps = ["Form: SA = 2πr² + 2πrh", `Sub: (2*3.14*${v1}²) + (2*3.14*${v1}*${v2})`, `Result: ${result}`];
+                    break;
+                case 'sphere': 
+                    result = 4 * pi * (v1 * v1); 
+                    steps = ["Form: SA = 4πr²", `Sub: 4 * 3.14 * (${v1}²)`, `Result: ${result}`];
+                    break;
+            }
+
+            displayWork(steps);
+
+            // Animate result display
+            resultOut.style.opacity = 0;
+            setTimeout(() => {
+                resultOut.innerText = result.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                resultOut.style.opacity = 1;
+
+            }, 100);
+        }
+    </script>
+</body>
+</html>
+
+
