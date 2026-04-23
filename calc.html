@@ -745,7 +745,7 @@
                 <button class="settings-btn" id="settings-trigger">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3"></circle>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 2 2 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
                     </svg>
                 </button>
             </div>
@@ -848,7 +848,7 @@
                 </label>
             </div>
 
-            <button class="placeholder-btn" id="refresh-sheet-btn">🔄 Update Spreadsheet Data</button>
+            <button class="placeholder-btn" id="refresh-sheet-btn">🔄 Refresh</button>
 
             <div class="back-btn" id="back-trigger">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
@@ -981,8 +981,10 @@
             try {
                 const response = await fetch(SHEET_URL);
                 const csv = await response.text();
-                // Simple CSV parser logic
-                sheetData = csv.split('\n').map(row => row.split(','));
+                // Improved CSV parser: splits rows, then handles potential quotes per cell
+                sheetData = csv.split(/\r?\n/).map(row => {
+                    return row.split(',').map(cell => cell.trim().replace(/^"(.*)"$/, '$1'));
+                });
                 replacePlaceholders();
                 console.log("// Spreadsheet synced.");
             } catch (err) {
@@ -991,42 +993,30 @@
         }
 
         function replacePlaceholders() {
-            const placeholders = document.body.innerHTML.match(/\{[A-Z],[0-9]+\}/g);
-            if (!placeholders) return;
-
-            // Using a recursive walker to avoid breaking event listeners by resetting innerHTML
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
-            let node;
-            while (node = walker.nextNode()) {
-                let text = node.nodeValue;
-                const matches = text.match(/\{([A-Z]),([0-9]+)\}/g);
-                if (matches) {
-                    matches.forEach(match => {
-                        const m = match.match(/\{([A-Z]),([0-9]+)\}/);
-                        const colIndex = m[1].charCodeAt(0) - 65; // A=0, B=1...
-                        const rowIndex = parseInt(m[2]) - 1; // 1-based to 0-based
+            // Targeted replacement for ss-placeholder elements
+            const placeholders = document.querySelectorAll('.ss-placeholder');
+            
+            placeholders.forEach(el => {
+                const text = el.textContent.trim();
+                const match = text.match(/\{([A-Z]),([0-9]+)\}/);
+                
+                if (match) {
+                    const colIndex = match[1].charCodeAt(0) - 65; // A=0, B=1...
+                    const rowIndex = parseInt(match[2]) - 1; // 1-based to 0-based
+                    
+                    if (sheetData[rowIndex] && sheetData[rowIndex][colIndex]) {
+                        const val = sheetData[rowIndex][colIndex];
+                        // Robust check for image extension or data URI
+                        const isImg = val.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) || val.startsWith('data:image');
                         
-                        if (sheetData[rowIndex] && sheetData[rowIndex][colIndex]) {
-                            const val = sheetData[rowIndex][colIndex].trim();
-                            // Check if image URL or base64
-                            const isImg = val.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) || val.startsWith('data:image');
-                            
-                            if (isImg) {
-                                const imgTag = `<img src="${val}" class="ss-image" alt="data">`;
-                                const parent = node.parentNode;
-                                if (parent && parent.classList.contains('ss-placeholder')) {
-                                    parent.innerHTML = imgTag;
-                                } else {
-                                    // Fallback replacement if not wrapped in placeholder class
-                                    node.nodeValue = text.replace(match, val);
-                                }
-                            } else {
-                                node.nodeValue = text.replace(match, val);
-                            }
+                        if (isImg) {
+                            el.innerHTML = `<img src="${val}" class="ss-image" alt="data">`;
+                        } else {
+                            el.textContent = val;
                         }
-                    });
+                    }
                 }
-            }
+            });
         }
 
         // Custom Dropdown Logic
