@@ -83,10 +83,21 @@
             color: rgba(255, 255, 255, 0.3);
         }
 
+        /* Logo Styling */
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: white;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
         /* Work Log Panel (Left) */
         .work-panel {
             position: absolute;
-            top: 8rem;
+            top: 12rem; /* Adjusted for larger header */
             left: 2rem;
             width: 320px;
             background: rgba(255, 255, 255, 0.01);
@@ -152,12 +163,118 @@
             box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
         }
 
-        .select-field {
-            appearance: none;
-            cursor: pointer;
-            background: rgba(188, 19, 254, 0.1);
-            border: 1px solid var(--neon-purple);
+        /* Custom Dropdown Styling */
+        .custom-dropdown {
+            position: relative;
+            margin-top: 0.4rem;
+        }
 
+        .dropdown-trigger {
+            background: rgba(188, 19, 254, 0.15);
+            border: 1px solid var(--neon-purple);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            color: white;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .dropdown-trigger:hover {
+            box-shadow: 0 0 15px rgba(188, 19, 254, 0.3);
+        }
+
+        .dropdown-trigger.active {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: calc(100% + 5px);
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            z-index: 100;
+            max-height: 300px;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .dropdown-options.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .dropdown-group-label {
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            padding: 0.8rem 1rem 0.4rem;
+            letter-spacing: 1.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .dropdown-item {
+            padding: 0.7rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.2s;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            opacity: 0; /* Hidden by default for staggered load */
+        }
+
+        /* Staggered build animation when parent has .show */
+        .dropdown-options.show .dropdown-item {
+            animation: itemAppear 0.3s forwards cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes itemAppear {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Incremental delays for each button */
+        .dropdown-options.show .dropdown-item:nth-child(2) { animation-delay: 0.05s; }
+        .dropdown-options.show .dropdown-item:nth-child(3) { animation-delay: 0.10s; }
+        .dropdown-options.show .dropdown-item:nth-child(4) { animation-delay: 0.15s; }
+        .dropdown-options.show .dropdown-item:nth-child(5) { animation-delay: 0.15s; }
+        .dropdown-options.show .dropdown-item:nth-child(7) { animation-delay: 0.20s; }
+        .dropdown-options.show .dropdown-item:nth-child(8) { animation-delay: 0.25s; }
+        .dropdown-options.show .dropdown-item:nth-child(9) { animation-delay: 0.30s; }
+        .dropdown-options.show .dropdown-item:nth-child(10) { animation-delay: 0.35s; }
+        .dropdown-options.show .dropdown-item:nth-child(11) { animation-delay: 0.40s; }
+
+        .dropdown-item:hover {
+            background: rgba(0, 242, 255, 0.1);
+            color: var(--neon-blue);
+            padding-left: 1.5rem;
+        }
+
+        .dropdown-item.selected {
+            color: var(--neon-purple);
+            font-weight: 600;
+            background: rgba(188, 19, 254, 0.05);
         }
 
         .btn-calculate {
@@ -197,7 +314,6 @@
             text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
         }
 
-
         .label-text {
             font-size: 0.6rem;
             color: rgba(255, 255, 255, 0.4);
@@ -207,7 +323,7 @@
             display: block;
         }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; }
 
         /* Scanning Line */
         .scan-line {
@@ -236,27 +352,407 @@
             background-image: url('https://upload.wikimedia.org');
         }
 
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-purple);
+            box-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        /* Settings Button Styling */
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            width: fit-content;
+        }
+
+        .settings-btn svg {
+            width: 18px;
+            height: 18px;
+            transition: transform 0.6s ease;
+        }
+
+        .settings-btn:hover svg {
+            transform: rotate(90deg);
+        }
+
+        /* Staggered Slide Logic for both menus */
+        .slide-element {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+        }
+
+        .menu-open .logo-text-wrap, .calc-open .logo-text-wrap { transform: translateX(-150%); opacity: 0; transition-delay: 0s; }
+        .menu-open .work-panel, .calc-open .work-panel { transform: translateX(-150%); opacity: 0; transition-delay: 0.1s; }
+        .menu-open .status-wrap, .calc-open .status-wrap { transform: translateX(-150%); opacity: 0; transition-delay: 0.2s; }
+        .menu-open .calc-panel, .calc-open .calc-panel { transform: translateX(-150%); opacity: 0; transition-delay: 0.3s; }
+        .menu-open .settings-btn-wrap, .calc-open .settings-btn-wrap { transform: translateX(-150%); opacity: 0; transition-delay: 0.4s; }
+
+        /* Settings Menu Container */
+        .settings-menu, .advanced-calc-menu {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            transition: right 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 50;
+            padding: 2rem;
+        }
+
+        .menu-open .settings-menu {
+            right: 0;
+            transition-delay: 0.5s;
+        }
+
+        .calc-open .advanced-calc-menu {
+            right: 0;
+            transition-delay: 0.5s;
+        }
+
+        .placeholder-btn, .advanced-calc-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            width: 320px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        .menu-open .settings-menu .placeholder-btn, 
+        .menu-open .settings-menu .toggle-wrap,
+        .calc-open .advanced-calc-menu .advanced-calc-btn,
+        .calc-open .advanced-calc-menu .calc-display-wrap {
+            animation: slideInFromRight 0.4s forwards cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes slideInFromRight {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Staggered entry for Settings */
+        .settings-menu .toggle-wrap:nth-child(2) { animation-delay: 0.6s; }
+        .settings-menu .toggle-wrap:nth-child(3) { animation-delay: 0.7s; }
+        .settings-menu .toggle-wrap:nth-child(4) { animation-delay: 0.8s; }
+        .settings-menu .placeholder-btn:nth-child(5) { animation-delay: 0.9s; }
+
+        /* Staggered entry for Calculator */
+        .advanced-calc-menu .calc-display-wrap { animation-delay: 0.6s; }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; width: 320px; }
+        .advanced-calc-menu .calc-btn { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid var(--glass-border); 
+            padding: 0.8rem; 
+            border-radius: 8px; 
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        .advanced-calc-menu .calc-btn:hover { background: var(--neon-blue); color: black; box-shadow: 0 0 15px var(--neon-blue); }
+        .calc-open .advanced-calc-menu .calc-btn { animation: slideInFromRight 0.3s forwards; }
+
+        /* Individual delays for 16 calculator buttons */
+        .calc-btn:nth-child(1) { animation-delay: 0.7s; }
+        .calc-btn:nth-child(2) { animation-delay: 0.75s; }
+        .calc-btn:nth-child(3) { animation-delay: 0.8s; }
+        .calc-btn:nth-child(4) { animation-delay: 0.85s; }
+        .calc-btn:nth-child(5) { animation-delay: 0.9s; }
+        .calc-btn:nth-child(6) { animation-delay: 0.95s; }
+        .calc-btn:nth-child(7) { animation-delay: 1.0s; }
+        .calc-btn:nth-child(8) { animation-delay: 1.05s; }
+        .calc-btn:nth-child(9) { animation-delay: 1.1s; }
+        .calc-btn:nth-child(10) { animation-delay: 1.15s; }
+        .calc-btn:nth-child(11) { animation-delay: 1.2s; }
+        .calc-btn:nth-child(12) { animation-delay: 1.25s; }
+        .calc-btn:nth-child(13) { animation-delay: 1.3s; }
+        .calc-btn:nth-child(14) { animation-delay: 1.35s; }
+        .calc-btn:nth-child(15) { animation-delay: 1.4s; }
+        .calc-btn:nth-child(16) { animation-delay: 1.45s; }
+
+        .placeholder-btn:hover, .advanced-calc-btn:hover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+        }
+
+        .back-btn {
+            margin-top: 1rem;
+            color: var(--neon-purple);
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            color: white;
+            text-shadow: 0 0 10px var(--neon-purple);
+        }
+
+        /* Toggle Switch Styling */
+        .toggle-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 320px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 22px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 34px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: rgba(0, 242, 255, 0.2); border-color: var(--neon-blue); }
+        input:checked + .slider:before { transform: translateX(22px); background-color: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); }
+
+        /* Animation Override Fix */
+        .no-anim.dropdown-options {
+            transition: none !important;
+            transform: none !important;
+        }
+
+        .no-anim.dropdown-options .dropdown-item {
+            animation: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neon-blue);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px var(--neon-blue);
+            display: none;
+        }
+
+        #custom-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-purple);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px var(--neon-purple);
+        }
+
+        body.custom-cursor-active {
+            cursor: none !important;
+        }
+
+        body.custom-cursor-active .settings-btn, 
+        body.custom-cursor-active .dropdown-trigger, 
+        body.custom-cursor-active .dropdown-item, 
+        body.custom-cursor-active .btn-calculate,
+        body.custom-cursor-active .back-btn,
+        body.custom-cursor-active .slider,
+        body.custom-cursor-active input,
+        body.custom-cursor-active button,
+        body.custom-cursor-active .calc-btn,
+        body.custom-cursor-active .placeholder-btn {
+            cursor: none !important;
+        }
+
+        /* Calc Display inside menu */
+        .calc-display-wrap {
+            width: 320px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: right;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            transform: translateX(50px);
+        }
+
+        #advanced-calc-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* Spreadsheet Image Rendering */
+        .ss-image {
+            max-width: 50px;
+            max-height: 50px;
+            display: inline-block;
+            vertical-align: middle;
+            border-radius: 4px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .glass-container {
+                width: 95vw;
+                height: 95vh;
+                border-radius: 24px;
+                padding-bottom: 1rem;
+                overflow-y: auto;
+            }
+            
+            /* Remove Setting and Calculator buttons on mobile to reduce clutter */
+            .settings-btn-wrap, .status-wrap {
+                display: none !important;
+            }
+
+            .work-panel {
+                position: relative;
+                top: 0;
+                left: 0;
+                width: 100%;
+                background: rgba(255, 255, 255, 0.02);
+                border-left: none;
+                border-top: 2px solid var(--neon-purple);
+                padding: 1rem;
+                margin-top: 1rem;
+                pointer-events: auto;
+            }
+
+            .calc-panel {
+                position: relative;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                margin-top: auto;
+                border-radius: 16px;
+                padding: 1.2rem;
+                max-height: none;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .noise {
+                opacity: 0.05;
+            }
+
+            /* Disable custom cursor on mobile as it's a touch interface */
+            #custom-cursor {
+                display: none !important;
+            }
+            body.custom-cursor-active {
+                cursor: auto !important;
+            }
+        }
+
     </style>
 </head>
 <body>
-
-
     <div id="bg-glow"></div>
     <div class="noise"></div>
+    <div id="custom-cursor"></div>
 
-    <div class="glass-container">
+    <div class="glass-container" id="main-container">
         <div class="scan-line"></div>
         <div class="corner-accent top-left"></div>
         <div class="corner-accent bottom-right"></div>
 
-        <!-- Interface Metadata -->
-        <div class="p-8 flex justify-between items-start w-full">
-            <div class="heading-font">Tool_Module // Area_Engine</div>
-            <div class="heading-font" id="live-clock">00:00:00</div>
+        <!-- Interface Metadata & Header -->
+        <div class="pt-8 pr-8 pl-8 pb-8 flex flex-col gap-4 items-start w-full">
+            <div class="logo-text slide-element logo-text-wrap flex items-center gap-4">
+                Jay's area helper 
+                <span class="ss-placeholder text-xs opacity-50 font-normal">{A,1}</span>
+            </div>
+            <div class="slide-element settings-btn-wrap">
+                <button class="settings-btn" id="settings-trigger">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <!-- Work Log Panel (Added Left Section) -->
-        <div class="work-panel">
+        <div class="work-panel slide-element">
             <span class="label-text">Logic Breakdown</span>
             <div class="work-content" id="work-log">
                 <span class="work-step" style="color: var(--neon-blue)">// System ready.</span>
@@ -271,30 +767,34 @@
         </div>
 
         <!-- Bottom Left Status -->
-        <div class="p-8">
-            <div class="heading-font">Protocol: Active</div>
+        <div class="p-8 slide-element status-wrap flex flex-col items-start">
+            <button class="settings-btn !w-auto !px-3 !mb-2 heading-font !text-white !bg-[rgba(188,19,254,0.1)] !border-[var(--neon-purple)]" id="calc-trigger">🖩 Calculator</button>
             <div class="heading-font">System: Area_Focus</div>
         </div>
 
         <!-- Calculator Panel (Bottom Right) -->
-        <div class="calc-panel">
+        <div class="calc-panel slide-element">
             <span class="label-text">Select Shape</span>
-            <select id="formula-select" class="input-field select-field">
-
-                <optgroup label="2D Area">
-                    <option value="rectangle">Rectangle</option>
-                    <option value="square">Square</option>
-                    <option value="circle">Circle (π=3.14)</option>
-                    <option value="triangle">Triangle</option>
-                </optgroup>
-                <optgroup label="3D Surface Area">
-                    <option value="cube">Cube</option>
-                    <option value="rect_prism">Rectangular Prism</option>
-                    <option value="tri_prism">Triangular Prism</option>
-                    <option value="cylinder">Cylinder (π=3.14)</option>
-                    <option value="sphere">Sphere (π=3.14)</option>
-                </optgroup>
-            </select>
+            
+            <div class="custom-dropdown">
+                <button id="dropdown-trigger" class="dropdown-trigger">
+                    <span id="selected-text">Rectangle</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div id="dropdown-options" class="dropdown-options">
+                    <div class="dropdown-group-label">2D Area</div>
+                    <div class="dropdown-item selected" data-value="rectangle">Rectangle</div>
+                    <div class="dropdown-item" data-value="square">Square</div>
+                    <div class="dropdown-item" data-value="circle">Circle (π=3.14)</div>
+                    <div class="dropdown-item" data-value="triangle">Triangle</div>
+                    <div class="dropdown-group-label">3D Surface Area</div>
+                    <div class="dropdown-item" data-value="cube">Cube</div>
+                    <div class="dropdown-item" data-value="rect_prism">Rectangular Prism</div>
+                    <div class="dropdown-item" data-value="tri_prism">Triangular Prism</div>
+                    <div class="dropdown-item" data-value="cylinder">Cylinder (π=3.14)</div>
+                    <div class="dropdown-item" data-value="sphere">Sphere (π=3.14)</div>
+                </div>
+            </div>
 
             <div id="inputs-container">
                 <div id="group-dim1">
@@ -319,12 +819,87 @@
                 <div class="result-value" id="result-out">0.00</div>
             </div>
         </div>
-    </div>
 
+        <!-- New Settings Menu Panel -->
+        <div class="settings-menu" id="settings-menu">
+            <div class="logo-text mb-8">System Settings</div>
+            
+            <div class="toggle-wrap">
+                <span class="heading-font" style="color: white; font-size: 0.75rem;">Dropdown Animation</span>
+                <label class="switch">
+                    <input type="checkbox" id="anim-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-wrap">
+                <span class="heading-font" style="color: white; font-size: 0.75rem;">Background Glow</span>
+                <label class="switch">
+                    <input type="checkbox" id="glow-toggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <div class="toggle-wrap">
+                <span class="heading-font" style="color: white; font-size: 0.75rem;">Custom Cursor</span>
+                <label class="switch">
+                    <input type="checkbox" id="cursor-toggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <button class="placeholder-btn" id="refresh-sheet-btn">🔄 Update Spreadsheet Data</button>
+
+            <div class="back-btn" id="back-trigger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Interface
+            </div>
+        </div>
+
+        <!-- New Advanced Calculator Panel -->
+        <div class="advanced-calc-menu" id="advanced-calc-menu">
+            <div class="logo-text mb-4">Advanced Calc</div>
+            
+            <div class="calc-display-wrap">
+                <div id="advanced-calc-display">0</div>
+            </div>
+
+            <div class="calc-grid">
+                <button class="calc-btn" onclick="calcInput('7')">7</button>
+                <button class="calc-btn" onclick="calcInput('8')">8</button>
+                <button class="calc-btn" onclick="calcInput('9')">9</button>
+                <button class="calc-btn" onclick="calcOp('/')">/</button>
+                
+                <button class="calc-btn" onclick="calcInput('4')">4</button>
+                <button class="calc-btn" onclick="calcInput('5')">5</button>
+                <button class="calc-btn" onclick="calcInput('6')">6</button>
+                <button class="calc-btn" onclick="calcOp('*')">*</button>
+
+                <button class="calc-btn" onclick="calcInput('1')">1</button>
+                <button class="calc-btn" onclick="calcInput('2')">2</button>
+                <button class="calc-btn" onclick="calcInput('3')">3</button>
+                <button class="calc-btn" onclick="calcOp('-')">-</button>
+
+                <button class="calc-btn" onclick="calcClear()">C</button>
+                <button class="calc-btn" onclick="calcInput('0')">0</button>
+                <button class="calc-btn" onclick="calcEquals()">=</button>
+                <button class="calc-btn" onclick="calcOp('+')">+</button>
+
+                <button class="calc-btn" onclick="calcAdvanced('sqrt')">√</button>
+                <button class="calc-btn" onclick="calcAdvanced('sin')">sin</button>
+                <button class="calc-btn" onclick="calcAdvanced('cos')">cos</button>
+                <button class="calc-btn" onclick="calcAdvanced('tan')">tan</button>
+            </div>
+
+            <div class="back-btn" id="calc-back-trigger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                Back to Interface
+            </div>
+        </div>
+    </div>
 
     <script>
         const bgGlow = document.getElementById('bg-glow');
-        const formulaSelect = document.getElementById('formula-select');
         const dim1 = document.getElementById('dim1');
         const dim2 = document.getElementById('dim2');
         const dim3 = document.getElementById('dim3');
@@ -335,6 +910,162 @@
         const label3 = document.getElementById('label-dim3');
         const resultOut = document.getElementById('result-out');
         const workLog = document.getElementById('work-log');
+        const customCursor = document.getElementById('custom-cursor');
+
+        // Spreadsheet Config
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTqesybA2aijZ6Ll4EHLsugbY-_eZHR3rKz8CwBkqe76AyuXmuuGsizdkgTTUm2d7djO8S8A6xmzukN/pub?gid=0&single=true&output=csv";
+        let sheetData = [];
+
+        // Settings / Calc Menu Toggle Logic
+        const mainContainer = document.getElementById('main-container');
+        const settingsTrigger = document.getElementById('settings-trigger');
+        const backTrigger = document.getElementById('back-trigger');
+        const calcTrigger = document.getElementById('calc-trigger');
+        const calcBackTrigger = document.getElementById('calc-back-trigger');
+        const refreshSheetBtn = document.getElementById('refresh-sheet-btn');
+
+        settingsTrigger.addEventListener('click', () => {
+            mainContainer.classList.add('menu-open');
+        });
+
+        backTrigger.addEventListener('click', () => {
+            mainContainer.classList.remove('menu-open');
+        });
+
+        calcTrigger.addEventListener('click', () => {
+            mainContainer.classList.add('calc-open');
+        });
+
+        calcBackTrigger.addEventListener('click', () => {
+            mainContainer.classList.remove('calc-open');
+        });
+
+        refreshSheetBtn.addEventListener('click', () => {
+            fetchSpreadsheetData();
+        });
+
+        // Animation Toggle Logic
+        const animToggle = document.getElementById('anim-toggle');
+        animToggle.addEventListener('change', () => {
+            if (animToggle.checked) {
+                dropdownOptions.classList.remove('no-anim');
+            } else {
+                dropdownOptions.classList.add('no-anim');
+            }
+        });
+
+        // Glow Toggle Logic
+        const glowToggle = document.getElementById('glow-toggle');
+        glowToggle.addEventListener('change', () => {
+            if (glowToggle.checked) {
+                bgGlow.classList.remove('hidden');
+            } else {
+                bgGlow.classList.add('hidden');
+            }
+        });
+
+        // Cursor Toggle Logic
+        const cursorToggle = document.getElementById('cursor-toggle');
+        cursorToggle.addEventListener('change', () => {
+            if (cursorToggle.checked) {
+                document.body.classList.add('custom-cursor-active');
+                customCursor.style.display = 'block';
+            } else {
+                document.body.classList.remove('custom-cursor-active');
+                customCursor.style.display = 'none';
+            }
+        });
+
+        // Spreadsheet Data Fetching & Replacement
+        async function fetchSpreadsheetData() {
+            try {
+                const response = await fetch(SHEET_URL);
+                const csv = await response.text();
+                // Simple CSV parser logic
+                sheetData = csv.split('\n').map(row => row.split(','));
+                replacePlaceholders();
+                console.log("// Spreadsheet synced.");
+            } catch (err) {
+                console.error("Spreadsheet sync failed:", err);
+            }
+        }
+
+        function replacePlaceholders() {
+            const placeholders = document.body.innerHTML.match(/\{[A-Z],[0-9]+\}/g);
+            if (!placeholders) return;
+
+            // Using a recursive walker to avoid breaking event listeners by resetting innerHTML
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+            let node;
+            while (node = walker.nextNode()) {
+                let text = node.nodeValue;
+                const matches = text.match(/\{([A-Z]),([0-9]+)\}/g);
+                if (matches) {
+                    matches.forEach(match => {
+                        const m = match.match(/\{([A-Z]),([0-9]+)\}/);
+                        const colIndex = m[1].charCodeAt(0) - 65; // A=0, B=1...
+                        const rowIndex = parseInt(m[2]) - 1; // 1-based to 0-based
+                        
+                        if (sheetData[rowIndex] && sheetData[rowIndex][colIndex]) {
+                            const val = sheetData[rowIndex][colIndex].trim();
+                            // Check if image URL or base64
+                            const isImg = val.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i) || val.startsWith('data:image');
+                            
+                            if (isImg) {
+                                const imgTag = `<img src="${val}" class="ss-image" alt="data">`;
+                                const parent = node.parentNode;
+                                if (parent && parent.classList.contains('ss-placeholder')) {
+                                    parent.innerHTML = imgTag;
+                                } else {
+                                    // Fallback replacement if not wrapped in placeholder class
+                                    node.nodeValue = text.replace(match, val);
+                                }
+                            } else {
+                                node.nodeValue = text.replace(match, val);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // Custom Dropdown Logic
+        const dropdownTrigger = document.getElementById('dropdown-trigger');
+        const dropdownOptions = document.getElementById('dropdown-options');
+        const selectedText = document.getElementById('selected-text');
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+        let currentFormula = 'rectangle';
+
+        dropdownTrigger.addEventListener('click', () => {
+            dropdownOptions.classList.toggle('show');
+            dropdownTrigger.classList.toggle('active');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!dropdownTrigger.contains(e.target) && !dropdownOptions.contains(e.target)) {
+                dropdownOptions.classList.remove('show');
+                dropdownTrigger.classList.remove('active');
+            }
+        });
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const value = item.getAttribute('data-value');
+                currentFormula = value;
+                selectedText.innerText = item.innerText;
+                
+                // Update selected styling
+                dropdownItems.forEach(i => i.classList.remove('selected'));
+                item.classList.add('selected');
+                
+                dropdownOptions.classList.remove('show');
+                dropdownTrigger.classList.remove('active');
+                
+                // Trigger formula logic
+                updateFormulaUI(value);
+            });
+        });
 
         // Mouse Tracking
         document.addEventListener('mousemove', (e) => {
@@ -345,23 +1076,65 @@
             bgGlow.style.setProperty('--y', `${y}%`);
             bgGlow.style.setProperty('--x2', `${100 - x}%`);
             bgGlow.style.setProperty('--y2', `${100 - y}%`);
+
+            // Custom Cursor Positioning
+            if (cursorToggle.checked) {
+                customCursor.style.left = e.clientX + 'px';
+                customCursor.style.top = e.clientY + 'px';
+            }
         });
 
-        // Clock Update
-        function updateClock() {
-            const now = new Date();
-            document.getElementById('live-clock').innerText = now.toTimeString().split(' ')[0];
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        // Advanced Calculator Logic
+        let calcBuffer = "0";
+        const calcDisplay = document.getElementById('advanced-calc-display');
 
-        // Formula UI Logic
-        formulaSelect.addEventListener('change', (e) => {
-            const type = e.target.value;
+        function calcInput(num) {
+            if (calcBuffer === "0") calcBuffer = num;
+            else calcBuffer += num;
+            calcUpdate();
+        }
+
+        function calcOp(op) {
+            calcBuffer += " " + op + " ";
+            calcUpdate();
+        }
+
+        function calcClear() {
+            calcBuffer = "0";
+            calcUpdate();
+        }
+
+        function calcUpdate() {
+            calcDisplay.innerText = calcBuffer;
+        }
+
+        function calcEquals() {
+            try {
+                let result = eval(calcBuffer);
+                calcBuffer = result.toString();
+                calcUpdate();
+            } catch(e) {
+                calcBuffer = "Error";
+                calcUpdate();
+            }
+        }
+
+        function calcAdvanced(mode) {
+            let val = parseFloat(calcBuffer);
+            if (isNaN(val)) return;
+            switch(mode) {
+                case 'sqrt': calcBuffer = Math.sqrt(val).toString(); break;
+                case 'sin': calcBuffer = Math.sin(val * Math.PI / 180).toString(); break;
+                case 'cos': calcBuffer = Math.cos(val * Math.PI / 180).toString(); break;
+                case 'tan': calcBuffer = Math.tan(val * Math.PI / 180).toString(); break;
+            }
+            calcUpdate();
+        }
+
+        // Formula UI Logic (Refactored to work with custom dropdown)
+        function updateFormulaUI(type) {
             groupDim2.classList.remove('hidden');
             groupDim3.classList.add('hidden');
-
-
             switch(type) {
                 case 'rectangle':
                     label1.innerText = "Length";
@@ -406,7 +1179,7 @@
                     groupDim2.classList.add('hidden');
                     break;
             }
-        });
+        }
 
         // "Show Your Work" Helper function
         function displayWork(steps) {
@@ -423,7 +1196,7 @@
         // Calculation Engine (Surface Area focus)
 
         function calculate() {
-            const type = formulaSelect.value;
+            const type = currentFormula;
             const v1 = parseFloat(dim1.value) || 0;
             const v2 = parseFloat(dim2.value) || 0;
             const v3 = parseFloat(dim3.value) || 0;
@@ -484,8 +1257,11 @@
 
             }, 100);
         }
+
+        // Init spreadsheet on load
+        window.onload = () => {
+            fetchSpreadsheetData();
+        };
     </script>
 </body>
 </html>
-
-
