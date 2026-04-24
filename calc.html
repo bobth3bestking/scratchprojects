@@ -768,7 +768,9 @@
 
         <!-- Bottom Left Status -->
         <div class="p-8 slide-element status-wrap flex flex-col items-start">
-            <button class="settings-btn !w-auto !px-3 !mb-2 heading-font !text-white !bg-[rgba(188,19,254,0.1)] !border-[var(--neon-purple)]" id="calc-trigger">🖩 Calculator</button>
+            <button class="settings-btn !w-auto !px-3 !mb-2 heading-font !text-white !bg-[rgba(188,19,254,0.1)] !border-[var(--neon-purple)]" id="calc-trigger">
+                <span class="ss-placeholder">{A,2}</span> Calculator
+            </button>
             <div class="heading-font">System: Area_Focus</div>
         </div>
 
@@ -981,10 +983,28 @@
             try {
                 const response = await fetch(SHEET_URL);
                 const csv = await response.text();
-                // Improved CSV parser: splits rows, then handles potential quotes per cell
-                sheetData = csv.split(/\r?\n/).map(row => {
-                    return row.split(',').map(cell => cell.trim().replace(/^"(.*)"$/, '$1'));
+                
+                // Advanced CSV parser logic to handle commas within quoted cells (essential for base64)
+                const rows = csv.split(/\r?\n/);
+                sheetData = rows.map(row => {
+                    const cells = [];
+                    let currentCell = "";
+                    let inQuotes = false;
+                    for (let i = 0; i < row.length; i++) {
+                        const char = row[i];
+                        if (char === '"') {
+                            inQuotes = !inQuotes;
+                        } else if (char === ',' && !inQuotes) {
+                            cells.push(currentCell.trim());
+                            currentCell = "";
+                        } else {
+                            currentCell += char;
+                        }
+                    }
+                    cells.push(currentCell.trim());
+                    return cells;
                 });
+
                 replacePlaceholders();
                 console.log("// Spreadsheet synced.");
             } catch (err) {
@@ -1004,10 +1024,16 @@
                     const colIndex = match[1].charCodeAt(0) - 65; // A=0, B=1...
                     const rowIndex = parseInt(match[2]) - 1; // 1-based to 0-based
                     
-                    if (sheetData[rowIndex] && sheetData[rowIndex][colIndex]) {
-                        const val = sheetData[rowIndex][colIndex];
-                        // Robust check for image extension or data URI
-                        const isImg = val.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) || val.startsWith('data:image');
+                    if (sheetData[rowIndex] && sheetData[rowIndex][colIndex] !== undefined) {
+                        let val = sheetData[rowIndex][colIndex];
+                        
+                        // Robust quote stripping
+                        val = val.replace(/^"(.*)"$/, '$1');
+
+                        // Enhanced image detection
+                        const isImg = val.match(/\.(jpg|jpeg|png|gif|webp|svg)/i) || 
+                                      val.toLowerCase().startsWith('data:image') || 
+                                      val.includes('encrypted-tbn0.gstatic.com');
                         
                         if (isImg) {
                             el.innerHTML = `<img src="${val}" class="ss-image" alt="data">`;
